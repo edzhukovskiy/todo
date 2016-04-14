@@ -1,0 +1,102 @@
+﻿<h1>Hi {{vm.user.firstName}}!</h1>
+<p>You're logged in!!</p>
+<p><a href="#/login" class="btn btn-primary">Logout</a></p>
+<h2>To-Do list</h2>
+
+<div class="col-md-12 margin-bt">
+    <div class="row">
+        <p class="text-danger" ng-repeat="error in vm.errors">{{ error }}</p>
+        <form role="form">
+            <table class="table table-sm">
+                <tr>
+                    <td colspan="5" class="text-center"><h3>Priority</h3><b>(select one color to detect priority)</b></td>
+                </tr>
+                <tr>
+                    <td ng-repeat="priority in vm.priorityList">
+                        <label class="btn btn-default btn-sm" ng-style="{'background-color': '#'+priority.color}">
+                            {{priority.title}}
+                            <input type="radio" ng-model="vm.itemData.priority_id" value="{{priority.id}}" />
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input type="text" id="title" class="form-control" placeholder="Your Task" ng-model="vm.itemData.title">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn btn-primary" ng-click="vm.createItem()">Add<span><img ng-if="vm.loader" src="http://www.ajaxload.info/images/exemples/21.gif"/></span></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="row">
+        <table class="table table-sm">
+            <tr>
+                <td>Done</td>
+                <td>To-Do title</td>
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
+            <tr ng-repeat="todo in vm.list">
+                <td><input type="checkbox" ng-model="vm.checkBox[todo.id]" ng-checked="todo.done" ng-change="vm.doneItem(todo.id,vm.checkBox[todo.id])" ng-true-value="1" ng-false-value="0"/></td>
+                <td><a ng-style="{'color' : '#'+todo.color}">
+                    <span ng-if="todo.done" ng-style="{'text-decoration' : 'line-through'}">{{todo.title}}</span>
+                    <span ng-if="!todo.done">{{todo.title}}</span>
+                </a></td>
+                <td><a class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal" ng-click="vm.loadCurrentToDo(todo.id)"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                <td><a class="btn btn-sm btn-danger" ng-click="vm.deleteItem(todo.id)"><i class="glyphicon glyphicon-remove"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Edit <b>{{vm.todo.title}}</b> To-Do
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="5" class="text-center"><h3>Priority</h3></td>
+                            </tr>
+                            <tr ng-repeat="priority in vm.priorityList">
+                                <td>
+                                    <label class="btn btn-default btn-sm" ng-style="{'background-color': '#'+priority.color}">
+                                        {{priority.title}}
+                                        <input type="radio" ng-model="vm.todo.priority_id" value="{{priority.id}}" ng-checked="vm.todo.priority_id == priority.id" />
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_title">Title</label>
+                        <input type="text" id="edit_title" class="form-control" placeholder="Your Task" ng-model="vm.todo.title">
+                    </div>
+                    <button type="button" data-dismiss="modal" ng-click="vm.updateItem(vm.todo.id)" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
