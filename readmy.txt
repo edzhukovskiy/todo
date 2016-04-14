@@ -1,0 +1,4 @@
+1.change apiUrl in app.js folder with your server address
+2.import database for priorities
+3.correct .env for database connection
+3.open ng folder index and it will work with laravel rest controller
